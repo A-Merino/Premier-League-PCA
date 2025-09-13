@@ -12,7 +12,7 @@
     - only for showing player progression
     1. Only show one year
         - explain x, y, z axis meanings
-    2. Show al years
+    2. Show all years
     3. Go through sub positions (4 -> 11 -> X)
     4. Show certain players nodes throughout years
         - Big Movements
@@ -26,3 +26,13 @@
     - Can do just to check or if big difference, talk about
     - 2D analysis + year over year == 3D analysis??
 - Mutual Information????
+- nationality analysis
+- 'how/what position do most french players in PL play most often?'
+    - 'Do players from same nation play similarly?'
+
+### Done So Far
+
+- grab data from csvs
+- compute PCA function
+    - saves to csv 
+    - plot pca
