@@ -1,5 +1,14 @@
 # PCA of Premier League Player Statistics
 
+## TODO
+1. Create dataset for 2025 players
+2. Merge all images already gathered with 2025
+3. go through and get all the images i dont have
+4. plot on the chart
+5. find groups
+6. write script
+
+
 ### Line of Work
 
 1. Create 3D-PCA Data from dataset
@@ -7,9 +16,8 @@
     - 11 neighborhoods (11 players on a team)
     - X number of neighborhoods (Football Manager play styles)
 2. Save each separate Dataset
-3. Use [igraph](https://python.igraph.org/en/stable/tutorial.html) to plot nodes
+3. Use [visx](https://airbnb.io/visx) to plot nodes
     - probably wont use edges
-    - only for showing player progression
     1. Only show one year
         - explain x, y, z axis meanings
     2. Show all years
@@ -34,5 +42,5 @@
 
 - grab data from csvs
 - compute PCA function
-    - saves to csv 
+    - saves to json
     - plot pca

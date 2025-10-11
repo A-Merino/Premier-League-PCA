@@ -2,6 +2,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import pandas as pd
 import utils as ut
+import numpy as np
 vm = 'value_millions'
 
 drop_list = [vm, 'link', 'Player_id', 'nationality', 'position', 'team', 'age',
@@ -9,41 +10,52 @@ drop_list = [vm, 'link', 'Player_id', 'nationality', 'position', 'team', 'age',
             'games_complete', 'games_subs', 'unused_subs']
 
 
-def compute_pca(data, year):
+def compute_pca(data, year, out_type, dim=3, min_min=0):
+    
+    data = data[data['minutes'] > min_min]
+
     names = data['Name']
 
     if vm in data.columns:
-        data = data.drop(drop_list, axis=1)
+        cd = data.drop(drop_list, axis=1)
     else:  # 2025 doesn't have vm appended
-        data = data.drop(drop_list[1:], axis=1)
+        cd = data.drop(drop_list[1:], axis=1)
 
 
-    data = data.drop(['Name'], axis=1)
+    pda = cd.drop(['Name'], axis=1)
 
-    pca = PCA(n_components=3)
-    x = pca.fit_transform(data)
+    pca = PCA(n_components=dim)
+    x = pca.fit_transform(pda)
+    pca.fit(pda)
 
+    mi = [np.abs(pca.components_[i]).argmax() for i in range(pca.components_.shape[0])]
+    col = list(data.columns)
+    nam = [col[mi[i]] for i in range(pca.components_.shape[0])]
+    # print(pca.components_)
+    print(pca.explained_variance_)
+    print(pca.explained_variance_ratio_)
+    print(nam)
     dic = {
         'names': names,
         'x': x[:,0],
-        'y': x[:,1],
-        'z': x[:,2]
+        'y': x[:,1]
+        # 'z': x[:,2]
     }
 
     locs = pd.DataFrame(dic)
-    ut.save_locs(locs, f'./pca_data/{year-1}-{year}full-pca.csv')
+    total = pd.merge(data, locs, left_on="Name", right_on="names")
+    plot_pca(x)
+    # ut.save_locs(total, f'./pca_data/{year-1}-{year}-{'full' if min_min == 0 else str(min_min)}-{dim}D-pca', out_type)
 
 def plot_pca(x):  
     fig = plt.figure(1, figsize=(8,6))
-    ax = fig.add_subplot(111, projection="3d")
+    ax = fig.add_subplot(111)
 
     scatter = ax.scatter(
         x[:,0],
-        x[:,1],
-        x[:,2]
+        x[:,1]
+        # x[:,2]
         )
-    for i, txt in enumerate(names):
-        ax.text(x[i,0],x[i,1],x[i,2], txt)
 
     plt.show()
 
